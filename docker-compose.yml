@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - ng_back/.env
+    volumes:
+      - pg_ng:/var/lib/postgresql/data
+
+  node_ng:
+    container_name: node_ng
+    build: ./ng_back
+    image: node_ng
+    ports:
+      - 5000:5000
+    depends_on:
+      - postgres
+    env_file:
+      - ng_back/.env
+
+  react_ng:
+    container_name: react_ng
+    build: ./ng_front
+    image: react_ng_image
+    volumes:
+      - build_react:/var/www/html
+
+  nginx_ng:
+    container_name: nginx_ng
+    build: ./nginx
+    image: nginx_ng_image
+    ports:
+      - 80:80
+    volumes:
+      - build_react:/var/www/html
+    depends_on:
+      - postgres
+      - node_ng
+      - react_ng
+
+volumes:
+  pg_ng:
+  build_react:
