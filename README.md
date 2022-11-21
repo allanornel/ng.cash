@@ -48,7 +48,7 @@ POST /transaction/:username (authenticated)
     - Route to cash-out
     - headers: { "Authorization": "Bearer $token" }
     - body: {
-       "value": 30
+       "ammount": 30
     }
 
 ```
